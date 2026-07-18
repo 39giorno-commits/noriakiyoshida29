@@ -1,0 +1,134 @@
+---
+import { getEntry } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import SectionHeading from '../components/SectionHeading.astro';
+const page = await getEntry('pages', 'home');
+if (!page) throw new Error('Home content not found');
+const d = page.data;
+---
+<BaseLayout title={d.title} description={d.description}>
+  <Header />
+  <main id="top">
+    <section class="relative min-h-[100svh] overflow-hidden bg-forest pt-16 text-white md:pt-20">
+      <div class="mx-auto grid min-h-[calc(100svh-4rem)] max-w-[1440px] md:min-h-[calc(100svh-5rem)] md:grid-cols-[1.05fr_.95fr]">
+        <div class="relative z-10 flex flex-col justify-between px-5 py-12 md:px-10 md:py-16 lg:px-16">
+          <div>
+            <p class="mb-8 text-xs font-black tracking-[0.36em] text-white/70">{d.hero.eyebrow}</p>
+            <h1 class="max-w-4xl text-[clamp(3.8rem,12vw,9rem)] font-black leading-[.88] tracking-[-.075em]">
+              <span class="block">{d.hero.line1}</span>
+              <span class="block">{d.hero.line2}</span>
+            </h1>
+          </div>
+          <div class="mt-16 flex items-end justify-between border-t border-white/35 pt-6">
+            <p class="text-xl font-bold tracking-[0.08em] md:text-3xl">{d.hero.statement}</p>
+            <p class="vertical-ja hidden text-xs tracking-[0.28em] text-white/70 sm:block">吉田法央 公式サイト</p>
+          </div>
+        </div>
+        <div class="relative min-h-[48svh] md:min-h-0">
+          <img src={d.hero.image} alt={d.hero.imageAlt} width="900" height="1100" fetchpriority="high" class="absolute inset-0 h-full w-full object-cover object-top grayscale-[10%]" />
+          <div class="absolute inset-0 bg-gradient-to-t from-forest/45 via-transparent to-transparent md:bg-gradient-to-r md:from-forest/25 md:to-transparent"></div>
+          <div class="absolute bottom-5 right-5 text-right text-[11px] font-bold tracking-[0.18em] text-white/75 md:bottom-10 md:right-10">YOSHIDA<br/>NORIAKI</div>
+        </div>
+      </div>
+    </section>
+
+    <section id="why" class="bg-warm px-5 py-24 md:px-10 md:py-40">
+      <div class="mx-auto grid max-w-6xl gap-16 md:grid-cols-[.55fr_1.45fr] md:gap-24">
+        <div class="reveal flex items-start gap-8 md:sticky md:top-32 md:self-start">
+          <p class="vertical-ja text-xs font-black tracking-[0.35em] text-forest">{d.reason.label}</p>
+          <h2 class="vertical-ja text-4xl font-black leading-[1.35] tracking-[0.08em] md:text-6xl">{d.reason.title}</h2>
+        </div>
+        <div class="reveal space-y-10 pt-4 text-lg font-medium leading-[2.2] md:text-xl">
+          {d.reason.paragraphs.map((p) => <p>{p}</p>)}
+          <blockquote class="mt-16 border-l-4 border-forest pl-7 text-2xl font-black leading-relaxed text-forest md:text-4xl">{d.reason.quote}</blockquote>
+        </div>
+      </div>
+    </section>
+
+    <section id="policy" class="px-5 py-24 md:px-10 md:py-40">
+      <div class="mx-auto max-w-7xl">
+        <SectionHeading en="THREE PROMISES" ja="府中への、3つの約束。" />
+        <div class="divide-y divide-ink/15 border-y border-ink/15">
+          {d.policies.map((policy) => (
+            <article class="reveal grid gap-8 py-12 md:grid-cols-[160px_1fr_1fr] md:gap-12 md:py-20">
+              <div class="text-7xl font-black tracking-[-.08em] text-forest md:text-8xl">{policy.number}</div>
+              <div>
+                <h3 class="text-3xl font-black leading-tight tracking-[-.04em] md:text-5xl">{policy.title}</h3>
+                <p class="mt-6 text-lg font-bold leading-relaxed text-forest">{policy.lead}</p>
+              </div>
+              <ul class="space-y-5 text-base font-medium leading-relaxed md:pt-2 md:text-lg">
+                {policy.items.map((item) => <li class="flex gap-4"><span class="mt-[.7em] h-2 w-2 shrink-0 rounded-full bg-forest"></span><span>{item}</span></li>)}
+              </ul>
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <section id="profile" class="bg-mist px-5 py-24 md:px-10 md:py-40">
+      <div class="mx-auto max-w-7xl">
+        <SectionHeading en="PROFILE" ja={d.profile.title} />
+        <p class="reveal mb-20 max-w-3xl text-xl font-bold leading-[1.9] md:text-2xl">{d.profile.intro}</p>
+        <div class="relative ml-3 border-l border-forest/30 md:ml-24">
+          {d.profile.timeline.map((item) => (
+            <article class="reveal relative grid gap-5 pb-16 pl-8 md:grid-cols-[180px_1fr] md:gap-12 md:pb-24 md:pl-16">
+              <span class="absolute -left-[7px] top-2 h-3 w-3 rounded-full bg-forest ring-8 ring-mist"></span>
+              <time class="text-sm font-black tracking-[.16em] text-forest">{item.year}</time>
+              <div>
+                <h3 class="text-2xl font-black tracking-[-.03em] md:text-4xl">{item.title}</h3>
+                <p class="mt-4 max-w-3xl text-base font-medium leading-[1.9] md:text-lg">{item.text}</p>
+              </div>
+            </article>
+          ))}
+        </div>
+        <div class="mt-8 grid gap-px overflow-hidden border border-forest/20 bg-forest/20 sm:grid-cols-2 lg:grid-cols-5">
+          {d.profile.facts.map((fact) => (
+            <div class="reveal bg-white p-6 md:p-8">
+              <p class="text-[11px] font-black tracking-[.22em] text-forest">{fact.label}</p>
+              <p class="mt-3 font-bold leading-relaxed">{fact.value}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <section id="support" class="bg-forest px-5 py-24 text-white md:px-10 md:py-40">
+      <div class="reveal mx-auto max-w-6xl text-center">
+        <p class="mb-6 text-xs font-black tracking-[.35em] text-white/65">JOIN THE TEAM</p>
+        <h2 class="text-5xl font-black leading-[1.12] tracking-[-.06em] md:text-8xl">{d.support.title}</h2>
+        <p class="mx-auto mt-8 max-w-2xl text-lg font-medium leading-[1.9] text-white/80">{d.support.text}</p>
+        <a href={d.support.url} target="_blank" rel="noopener noreferrer" class="mt-12 inline-flex min-h-16 items-center justify-center rounded-full bg-white px-10 text-base font-black text-forest transition hover:scale-[1.02] hover:bg-warm">支援フォームを開く <span class="ml-5">↗</span></a>
+      </div>
+    </section>
+
+    <section class="px-5 py-24 md:px-10 md:py-32">
+      <div class="mx-auto max-w-7xl">
+        <SectionHeading en="SOCIAL" ja="日々の活動を、もっと近くに。" />
+        <div class="grid gap-4 md:grid-cols-3">
+          {d.social.map((s) => (
+            <a href={s.url} target="_blank" rel="noopener noreferrer" class="reveal group flex min-h-56 flex-col justify-between border border-ink/15 p-7 transition hover:border-forest hover:bg-mist md:p-9">
+              <span class="text-sm font-black tracking-[.14em] text-forest">{s.label}</span>
+              <div class="flex items-end justify-between gap-6">
+                <p class="max-w-[15rem] text-xl font-bold leading-relaxed">{s.note}</p>
+                <span class="text-3xl transition group-hover:-translate-y-1 group-hover:translate-x-1">↗</span>
+              </div>
+            </a>
+          ))}
+        </div>
+      </div>
+    </section>
+  </main>
+  <footer class="border-t border-ink/15 px-5 py-10 md:px-10">
+    <div class="mx-auto flex max-w-7xl flex-col gap-6 text-sm md:flex-row md:items-end md:justify-between">
+      <div>
+        <p class="text-2xl font-black tracking-[-.04em] text-forest">ONE FUCHU</p>
+        <p class="mt-2 font-bold">吉田法央 公式サイト</p>
+      </div>
+      <div class="text-ink/55 md:text-right">
+        <p>© {new Date().getFullYear()} YOSHIDA NORIAKI</p>
+        <p class="mt-1">府中を、前へ。</p>
+      </div>
+    </div>
+  </footer>
+</BaseLayout>
